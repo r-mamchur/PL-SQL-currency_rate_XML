@@ -11,25 +11,25 @@ CREATE TABLE LOG_ALL
   CREATED_DATE  DATE                            DEFAULT Sysdate
 );
 
-COMMENT ON TABLE LOG_ALL IS 'Протокол виконання дій';
+COMMENT ON TABLE LOG_ALL IS 'РџСЂРѕС‚РѕРєРѕР» РІРёРєРѕРЅР°РЅРЅСЏ РґС–Р№';
 
-COMMENT ON COLUMN LOG_ALL.MODULE_LABEL IS 'Умовне позначення виконуваного програмного модулю';
+COMMENT ON COLUMN LOG_ALL.MODULE_LABEL IS 'РЈРјРѕРІРЅРµ РїРѕР·РЅР°С‡РµРЅРЅСЏ РІРёРєРѕРЅСѓРІР°РЅРѕРіРѕ РїСЂРѕРіСЂР°РјРЅРѕРіРѕ РјРѕРґСѓР»СЋ';
 
-COMMENT ON COLUMN LOG_ALL.RECORD_ID IS 'Порядковий номер запису у протоколі';
+COMMENT ON COLUMN LOG_ALL.RECORD_ID IS 'РџРѕСЂСЏРґРєРѕРІРёР№ РЅРѕРјРµСЂ Р·Р°РїРёСЃСѓ Сѓ РїСЂРѕС‚РѕРєРѕР»С–';
 
-COMMENT ON COLUMN LOG_ALL.DT IS 'Дата запису';
+COMMENT ON COLUMN LOG_ALL.DT IS 'Р”Р°С‚Р° Р·Р°РїРёСЃСѓ';
 
-COMMENT ON COLUMN LOG_ALL.PROCESS_ID IS 'Системний ідентифікатор процесу Oracle';
+COMMENT ON COLUMN LOG_ALL.PROCESS_ID IS 'РЎРёСЃС‚РµРјРЅРёР№ С–РґРµРЅС‚РёС„С–РєР°С‚РѕСЂ РїСЂРѕС†РµСЃСѓ Oracle';
 
-COMMENT ON COLUMN LOG_ALL.IMPORTANCE IS 'Рівень важливості запису';
+COMMENT ON COLUMN LOG_ALL.IMPORTANCE IS 'Р С–РІРµРЅСЊ РІР°Р¶Р»РёРІРѕСЃС‚С– Р·Р°РїРёСЃСѓ';
 
-COMMENT ON COLUMN LOG_ALL.ERROR_CODE IS 'Код програмної помилки (тільки для записів про помилки, для інших пустий)';
+COMMENT ON COLUMN LOG_ALL.ERROR_CODE IS 'РљРѕРґ РїСЂРѕРіСЂР°РјРЅРѕС— РїРѕРјРёР»РєРё (С‚С–Р»СЊРєРё РґР»СЏ Р·Р°РїРёСЃС–РІ РїСЂРѕ РїРѕРјРёР»РєРё, РґР»СЏ С–РЅС€РёС… РїСѓСЃС‚РёР№)';
 
-COMMENT ON COLUMN LOG_ALL.TXT IS 'Текст запису';
+COMMENT ON COLUMN LOG_ALL.TXT IS 'РўРµРєСЃС‚ Р·Р°РїРёСЃСѓ';
 
-COMMENT ON COLUMN LOG_ALL.CREATED_BY IS 'Дата створення запису';
+COMMENT ON COLUMN LOG_ALL.CREATED_BY IS 'Р”Р°С‚Р° СЃС‚РІРѕСЂРµРЅРЅСЏ Р·Р°РїРёСЃСѓ';
 
-COMMENT ON COLUMN LOG_ALL.CREATED_DATE IS 'Користувач, що створив запис';
+COMMENT ON COLUMN LOG_ALL.CREATED_DATE IS 'РљРѕСЂРёСЃС‚СѓРІР°С‡, С‰Рѕ СЃС‚РІРѕСЂРёРІ Р·Р°РїРёСЃ';
 
 
 CREATE OR REPLACE TRIGGER LOG_ALL_INSERT

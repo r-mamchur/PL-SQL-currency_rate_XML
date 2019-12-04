@@ -1,6 +1,6 @@
 CREATE OR REPLACE PACKAGE body currency_xml IS
 
-   -- встановити курс на задану дату
+   -- РІСЃС‚Р°РЅРѕРІРёС‚Рё РєСѓСЂСЃ РЅР° Р·Р°РґР°РЅСѓ РґР°С‚Сѓ
   PROCEDURE currency_set (p_request_date in date)
   is
     r_set_date  date;
@@ -14,23 +14,23 @@ CREATE OR REPLACE PACKAGE body currency_xml IS
 	select max(to_char(start_action_date,'YYYYMMDD')||to_char(rate))
 	     into r_str from currency_rates where start_action_date <= r_set_date;
 
-        -- конструкцiя to_date(substr(r_str,9),'YYYYMMDD')<>r_set_date про всяк випадок,
-	-- якщо за цю дату курс вже є, але вiдрiзняється
-	-- збiй типу r_set_date=null проiгнорується
+        -- РєРѕРЅСЃС‚СЂСѓРєС†iСЏ to_date(substr(r_str,9),'YYYYMMDD')<>r_set_date РїСЂРѕ РІСЃСЏРє РІРёРїР°РґРѕРє,
+	-- СЏРєС‰Рѕ Р·Р° С†СЋ РґР°С‚Сѓ РєСѓСЂСЃ РІР¶Рµ С”, Р°Р»Рµ РІiРґСЂiР·РЅСЏС”С‚СЊСЃСЏ
+	-- Р·Р±iР№ С‚РёРїСѓ r_set_date=null РїСЂРѕiРіРЅРѕСЂСѓС”С‚СЊСЃСЏ
 	IF to_date(substr(r_str,1,8),'YYYYMMDD')<>r_set_date and to_number(substr(r_str,9))<>r_rate Then
 	   insert into currency_rates ( CURRENCY_CODE, START_ACTION_DATE,RATE) values ('USD',r_set_date,r_rate);
            Insert Into log_all(module_label, dt, importance, txt)
-              Values('Currency_xml',sysdate, 1, 'Внесено курс валют на '||to_char(r_set_date,'DD.MM.YYYY') );
+              Values('Currency_xml',sysdate, 1, 'Р’РЅРµСЃРµРЅРѕ РєСѓСЂСЃ РІР°Р»СЋС‚ РЅР° '||to_char(r_set_date,'DD.MM.YYYY') );
 	Else
-	   dbmsout('не заносим','N');
+	   dbmsout('РЅРµ Р·Р°РЅРѕСЃРёРј','N');
            Insert Into log_all(module_label, dt, importance, txt)
-              Values('Currency_xml',sysdate, 1, 'НЕвнесено курс валют, pfsoft на '||to_char(r_set_date,'DD.MM.YYYY') );
+              Values('Currency_xml',sysdate, 1, 'РќР•РІРЅРµСЃРµРЅРѕ РєСѓСЂСЃ РІР°Р»СЋС‚, pfsoft РЅР° '||to_char(r_set_date,'DD.MM.YYYY') );
 	End if;
     Commit;
 
   End currency_set;
 
-  -- отримати на певну дату, дата встановлення курсу може вiдрiзнятися вiд дати запиту
+  -- РѕС‚СЂРёРјР°С‚Рё РЅР° РїРµРІРЅСѓ РґР°С‚Сѓ, РґР°С‚Р° РІСЃС‚Р°РЅРѕРІР»РµРЅРЅСЏ РєСѓСЂСЃСѓ РјРѕР¶Рµ РІiРґСЂiР·РЅСЏС‚РёСЃСЏ РІiРґ РґР°С‚Рё Р·Р°РїРёС‚Сѓ
  PROCEDURE read_from_pfsoft(p_request_date in date, p_set_date out date, p_rate out number)
  is
     url        VARCHAR2(256);
@@ -57,13 +57,13 @@ CREATE OR REPLACE PACKAGE body currency_xml IS
     IF not r_success THEN
        utl_http.end_response(resp);
        Insert Into log_all(module_label, dt, importance, txt)
-            Values('Currency_xml',sysdate, 10, 'Немає доступу '||to_char(p_request_date,'DD.MM.YYYY') 
+            Values('Currency_xml',sysdate, 10, 'РќРµРјР°С” РґРѕСЃС‚СѓРїСѓ '||to_char(p_request_date,'DD.MM.YYYY') 
                ||' status - '||to_char(resp.status_code)
                ||' reason_phrase - '||resp.reason_phrase );
        Commit;
        Return;
     End If;
-    -- Шапка HTTP
+    -- РЁР°РїРєР° HTTP
     FOR i IN 1 .. utl_http.get_header_count(resp)
     LOOP utl_http.get_header(resp, i, name, value);
        r_success := name = 'Content-Type' AND value like 'text/xml%';
@@ -73,37 +73,37 @@ CREATE OR REPLACE PACKAGE body currency_xml IS
     IF not r_success THEN
        utl_http.end_response(resp);
        Insert Into log_all(module_label, dt, importance, txt)
-            Values('Currency_xml',sysdate, 10, 'Помилка в шапцi '||to_char(p_request_date,'DD.MM.YYYY')||'  '||name ||'-'||value);
+            Values('Currency_xml',sysdate, 10, 'РџРѕРјРёР»РєР° РІ С€Р°РїС†i '||to_char(p_request_date,'DD.MM.YYYY')||'  '||name ||'-'||value);
        Commit;
        Return;
     End if;
-    -- Збираєм XML
+    -- Р—Р±РёСЂР°С”Рј XML
     BEGIN
       LOOP utl_http.read_line(resp, value, TRUE);
            r_str := r_str || nvl(value,' ');
       END LOOP;
     EXCEPTION
-      -- тут закриється i вподальшому закривати непотрiбно
+      -- С‚СѓС‚ Р·Р°РєСЂРёС”С‚СЊСЃСЏ i РІРїРѕРґР°Р»СЊС€РѕРјСѓ Р·Р°РєСЂРёРІР°С‚Рё РЅРµРїРѕС‚СЂiР±РЅРѕ
       WHEN utl_http.end_of_body THEN
          utl_http.end_response(resp);
       When OTHERS THEN
          utl_http.end_response(resp);
          err_code:=sqlcode;
          err_text:=sqlerrm;
-         tmp_msg:='body http ERROR EXCEPTION (код '||to_char(err_code)||'): '||
+         tmp_msg:='body http ERROR EXCEPTION (РєРѕРґ '||to_char(err_code)||'): '||
                CHR(10)||err_text;
          Insert into log_all(module_label, dt, importance, error_code, txt)
              Values('Currency_xml', sysdate, 10, err_code, tmp_msg);
          Commit;
     END;
 
-    r_xml:=xmltype(r_str);    -- наш результат
+    r_xml:=xmltype(r_str);    -- РЅР°С€ СЂРµР·СѓР»СЊС‚Р°С‚
 
     r_str:=r_xml.extract('/ValCurs/@SetDate').getstringval();
     p_set_date := to_date(r_str,'DD/MM/YYYY');
 
     r_xml_usd:=r_xml.EXTRACT('/ValCurs/Valute[./CharCode="USD"]');
-     --  mожна
+     --  mРѕР¶РЅР°
      -- r_xml_usd:=r_xml.EXTRACT('/ValCurs/Valute[CharCode="USD"]');
 
     p_rate := r_xml_usd.extract('/Valute/Value/text()').getnumberval() /
@@ -113,7 +113,7 @@ CREATE OR REPLACE PACKAGE body currency_xml IS
      utl_http.end_response(resp);
      err_code:=sqlcode;
      err_text:=sqlerrm;
-     tmp_msg:='ERROR EXCEPTION (код '||to_char(err_code)||'): '||
+     tmp_msg:='ERROR EXCEPTION (РєРѕРґ '||to_char(err_code)||'): '||
              CHR(10)||err_text;
      Insert into log_all(module_label, dt, importance, error_code, txt)
              Values('Currency_xml', sysdate, 10, err_code, tmp_msg);

@@ -1,10 +1,10 @@
-CREATE OR REPLACE PACKAGE BIL_ADMIN.currency_xml IS
+CREATE OR REPLACE PACKAGE currency_xml IS
 
--- встановити курс на задану дату
+-- РІСЃС‚Р°РЅРѕРІРёС‚Рё РєСѓСЂСЃ РЅР° Р·Р°РґР°РЅСѓ РґР°С‚Сѓ
   PROCEDURE currency_set (p_request_date in date);
 
--- з pfsoft
--- отримати на певну дату, дата встановлення валюти може вiдрiзнятися вiд дати запиту
+-- Р· pfsoft
+-- РѕС‚СЂРёРјР°С‚Рё РЅР° РїРµРІРЅСѓ РґР°С‚Сѓ, РґР°С‚Р° РІСЃС‚Р°РЅРѕРІР»РµРЅРЅСЏ РІР°Р»СЋС‚Рё РјРѕР¶Рµ РІiРґСЂiР·РЅСЏС‚РёСЃСЏ РІiРґ РґР°С‚Рё Р·Р°РїРёС‚Сѓ
  PROCEDURE read_from_pfsoft(p_request_date in date, p_set_date out date, p_rate out number);
 
 END currency_xml;

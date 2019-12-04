@@ -5,10 +5,10 @@ CREATE TABLE CURRENCY_RATES
   RATE               NUMBER(12,4)
 );
 
-COMMENT ON TABLE CURRENCY_RATES IS 'Довідник курсів валют';
+COMMENT ON TABLE CURRENCY_RATES IS 'Р”РѕРІС–РґРЅРёРє РєСѓСЂСЃС–РІ РІР°Р»СЋС‚';
 
-COMMENT ON COLUMN CURRENCY_RATES.CURRENCY_CODE IS 'Код валюти';
+COMMENT ON COLUMN CURRENCY_RATES.CURRENCY_CODE IS 'РљРѕРґ РІР°Р»СЋС‚Рё';
 
-COMMENT ON COLUMN CURRENCY_RATES.START_ACTION_DATE IS 'Дата, з якої починає діяти встановлений курс валюти';
+COMMENT ON COLUMN CURRENCY_RATES.START_ACTION_DATE IS 'Р”Р°С‚Р°, Р· СЏРєРѕС— РїРѕС‡РёРЅР°С” РґС–СЏС‚Рё РІСЃС‚Р°РЅРѕРІР»РµРЅРёР№ РєСѓСЂСЃ РІР°Р»СЋС‚Рё';
 
-COMMENT ON COLUMN CURRENCY_RATES.RATE IS 'Курс валюти по відношенню до гривні';
+COMMENT ON COLUMN CURRENCY_RATES.RATE IS 'РљСѓСЂСЃ РІР°Р»СЋС‚Рё РїРѕ РІС–РґРЅРѕС€РµРЅРЅСЋ РґРѕ РіСЂРёРІРЅС–';
